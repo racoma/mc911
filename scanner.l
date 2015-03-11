@@ -2,30 +2,58 @@
 #include "parser.h"
 %}
 
-STRING [a-z][a-z0-9_]*
-WHITESPACE [ \n\r\t]+
-ANY_CHAR .
+DOCUMENTCLASS \\documentclass\[.*\]\{.*\}
+USERPACKAGE \\userpackage\[.*\]\{.*\}
+AUTHOR \\athor\{.*\}
 
-%option case-insensitive
+PHRASE [A-z0-9_ \.\,-]+
+STRING [A-z0-9_ ]+
+WHITESPACE [ \r\t]+
+ANY_CHAR .
 
 %%
 
 {WHITESPACE} /* ignore */ ;
-"SELECT" 	{return T_SELECT;}
-"FROM" 		{return T_FROM; }
-"CREATE"	{return T_CREATE;}
-"TABLE"		{return T_TABLE;}
-"INSERT"	{return T_INSERT;}
-"INTO"		{return T_INTO;}
-"VALUES"	{return T_VALUES;}
+{DOCUMENTCLASS} /* ignore */ ;
+{USERPACKAGE} /* ignore */ ;
+{AUTHOR} /* ignore */ ;
+
+"\\title" {	
+	yylval.title = (char *) strdup(yytext);
+	return T_TITLE;
+}
+
+"\\begin" 			{return T_BEGIN; }
+"\\end"				{return T_END;}
+"\\maketitle"		{return T_MAKETITLE;}
+"\\textbf"			{return T_TEXTBF;}
+"\\textit"			{return T_TEXTIT;}
+"\\includegraphics"	{return T_IMG;}
+"\\cite"			{return T_CITE;}
+"\\bibitem"			{return T_BBITEM;}
+"\\item"			{return T_ITEM;}
+
+"document"			{return T_DOCUMENT;}
+"itemize"			{return T_ITEMIZE;}
+"thebibliography"	{return T_THEBIB;}
+
+"\\$"	{return T_CIFRAO;}
+"\\n"	{return T_NEWLINE;}
+
 "("		{return '(';}
 ")"		{return ')';} 
-"," 		{return ',';}
+"{"		{return '{';}
+"}"		{return '}';}
+"," 	{return ',';}
 ";"		{return ';';}
 "*"		{return '*';}
 
+{PHRASE} {
+	yylval.str = (char *) strdup(yytext);
+	return T_PHRASE;
+}
 
-{STRING} {	
+{STRING} {
 	yylval.str = (char *) strdup(yytext);
 	return T_STRING;
 }

@@ -10,19 +10,28 @@ void init_vector(char* buffer, int size);
  
 %union{
 	char *str;
+	char *title;
 	int  *intval;
 }
 
 %token <str> T_STRING
-%token T_SELECT
-%token T_FROM
-%token T_CREATE
-%token T_TABLE
-%token T_INSERT
-%token T_INTO
-%token T_VALUES
+%token <str> T_PHRASE
 
-%type <str> create_stmt insert_stmt select_stmt col_list col_select_list values_list 
+%token T_TITLE
+%token T_BEGIN
+%token T_END
+%token T_MAKETITLE
+%token T_TEXTBF
+%token T_TEXTIT
+%token T_IMG
+%token T_CITE
+%token T_BBITEM
+%token T_ITEM
+%token T_DOCUMENT
+%token T_ITEMIZE
+%token T_THEBIB
+%token T_CIFRAO
+%token T_NEWLINE
 
 %start stmt_list
 
@@ -35,23 +44,9 @@ stmt_list: 	stmt_list stmt
 ;
 
 stmt:
-		create_stmt ';'	{printf("%s",$1);}
-	|	insert_stmt ';'	{printf("%s",$1);}
-	|	select_stmt ';' {printf("%s",$1);}
-
-;
-
-create_stmt:
-	   T_CREATE T_TABLE T_STRING '(' col_list ')' 	{	FILE *F = fopen($3, "w"); 
-								fprintf(F, "%s\n", $5);
-								fclose(F);
-								$$ = concat(5, "\nCREATE TABLE: ", $3, "\nCOL_NAME: ", $5, "\n\n");
-							}
-;
-
-col_list:
-		T_STRING 		{ $$ = $1; }
-	| 	col_list ',' T_STRING 	{ $$ = concat(3, $1, ";", $3); }
+	T_TITLE '{' T_PHRASE '}' {
+		printf("%s", $3);
+	}
 ;
  
 %%
@@ -63,7 +58,7 @@ char* concat(int count, ...)
 
     va_start(ap, count);
     for(i=0 ; i<count ; i++)
-        len += strlen(va_arg(ap, char*));
+		len += strlen(va_arg(ap, char*));
     va_end(ap);
 
     char *result = (char*) calloc(sizeof(char),len);
