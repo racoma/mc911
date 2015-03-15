@@ -13,10 +13,10 @@ ANY_CHAR .
 
 %%
 
-{WHITESPACE} /* ignore */ ;
-{DOCUMENTCLASS} /* ignore */ ;
-{USERPACKAGE} /* ignore */ ;
-{AUTHOR} /* ignore */ ;
+{WHITESPACE}         /* ignore */ ;
+{DOCUMENTCLASS}      /* ignore */ ;
+{USERPACKAGE}        /* ignore */ ;
+{AUTHOR}             /* ignore */ ;
 
 "\\title" {	
 	yylval.title = (char *) strdup(yytext);
@@ -25,17 +25,16 @@ ANY_CHAR .
 
 "\\begin" 			{return T_BEGIN; }
 "\\end"				{return T_END;}
-"\\maketitle"		{return T_MAKETITLE;}
+"\\maketitle"			{return T_MAKETITLE;}
 "\\textbf"			{return T_TEXTBF;}
 "\\textit"			{return T_TEXTIT;}
-"\\includegraphics"	{return T_IMG;}
+"\\includegraphics"		{return T_IMG;}
 "\\cite"			{return T_CITE;}
 "\\bibitem"			{return T_BBITEM;}
 "\\item"			{return T_ITEM;}
-
 "document"			{return T_DOCUMENT;}
 "itemize"			{return T_ITEMIZE;}
-"thebibliography"	{return T_THEBIB;}
+"thebibliography"		{return T_THEBIB;}
 
 "\\$"	{return T_CIFRAO;}
 "\\n"	{return T_NEWLINE;}
@@ -44,7 +43,7 @@ ANY_CHAR .
 ")"		{return ')';} 
 "{"		{return '{';}
 "}"		{return '}';}
-"," 	{return ',';}
+"," 		{return ',';}
 ";"		{return ';';}
 "*"		{return '*';}
 

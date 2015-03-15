@@ -35,7 +35,7 @@ void init_vector(char* buffer, int size);
 %token T_CIFRAO
 %token T_NEWLINE
 
-%type <str> title_stmt textbf_stmt textit_stmt maketitle_stmt
+%type <str> title_stmt textbf_stmt textit_stmt maketitle_stmt begin_itemize_stmt item_stmt end_itemize_stmt
 
 %start stmt_list
 
@@ -52,9 +52,13 @@ stmt:
 	|	maketitle_stmt
 	|	textbf_stmt 
 	|	textit_stmt
+	|	begin_itemize_stmt
+	|	item_stmt
+	|	end_itemize_stmt	
 	
 ;
  
+
 title_stmt:
 	T_TITLE '{' T_PHRASE '}' {
 		title = (char *)malloc(T_PHRASE); 
@@ -65,7 +69,6 @@ title_stmt:
 maketitle_stmt:
 	T_MAKETITLE {
 		printf("%s", title);
-		
 	}
 ;
 
@@ -78,6 +81,24 @@ textbf_stmt:
 textit_stmt:
 	T_TEXTIT '{' T_PHRASE '}' {
 		printf("<i> %s </i>", $3);
+	}
+;
+
+begin_itemize_stmt:
+	T_BEGIN '{' T_ITEMIZE '}'{
+		printf("<ul>");	
+	}
+;
+
+item_stmt:
+	T_ITEM T_PHRASE{
+		printf("<li> %s", $2);
+	}
+;
+
+end_itemize_stmt:
+	T_END '{' T_ITEMIZE '}'{
+		printf("</ul>");	
 	}
 ;
 
