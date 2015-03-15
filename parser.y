@@ -5,7 +5,9 @@
 #include <stdlib.h>
 
 char *concat(int count, ...);
+char *title;
 void init_vector(char* buffer, int size);
+
 %}
  
 %union{
@@ -33,6 +35,8 @@ void init_vector(char* buffer, int size);
 %token T_CIFRAO
 %token T_NEWLINE
 
+%type <str> title_stmt textbf_stmt textit_stmt maketitle_stmt
+
 %start stmt_list
 
 %error-verbose
@@ -44,11 +48,40 @@ stmt_list: 	stmt_list stmt
 ;
 
 stmt:
-	T_TITLE '{' T_PHRASE '}' {
-		printf("%s", $3);
-	}
+		title_stmt 
+	|	maketitle_stmt
+	|	textbf_stmt 
+	|	textit_stmt
+	
 ;
  
+title_stmt:
+	T_TITLE '{' T_PHRASE '}' {
+		title = (char *)malloc(T_PHRASE); 
+		title = $3;
+	}
+;
+
+maketitle_stmt:
+	T_MAKETITLE {
+		printf("%s", title);
+		
+	}
+;
+
+textbf_stmt:
+	T_TEXTBF '{' T_PHRASE '}' {
+		printf("<b> %s </b>", $3);
+	}
+;
+
+textit_stmt:
+	T_TEXTIT '{' T_PHRASE '}' {
+		printf("<i> %s </i>", $3);
+	}
+;
+
+
 %%
  
 char* concat(int count, ...)
