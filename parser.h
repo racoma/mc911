@@ -46,22 +46,23 @@ extern int yydebug;
   enum yytokentype
   {
     T_STRING = 258,
-    T_PHRASE = 259,
-    T_TITLE = 260,
-    T_BEGIN = 261,
-    T_END = 262,
-    T_MAKETITLE = 263,
-    T_TEXTBF = 264,
-    T_TEXTIT = 265,
-    T_IMG = 266,
-    T_CITE = 267,
-    T_BBITEM = 268,
-    T_ITEM = 269,
-    T_DOCUMENT = 270,
-    T_ITEMIZE = 271,
-    T_THEBIB = 272,
-    T_CIFRAO = 273,
-    T_NEWLINE = 274
+    T_WHITESPACE = 259,
+    T_NEWLINE = 260,
+    T_TITLE = 261,
+    T_BEGIN = 262,
+    T_END = 263,
+    T_MAKETITLE = 264,
+    T_TEXTBF = 265,
+    T_TEXTIT = 266,
+    T_IMG = 267,
+    T_CITE = 268,
+    T_BBITEM = 269,
+    T_ITEM = 270,
+    T_DOCUMENT = 271,
+    T_ITEMIZE = 272,
+    T_THEBIB = 273,
+    T_CIFRAO = 274,
+    T_ENDLINE = 275
   };
 #endif
 
@@ -70,13 +71,13 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 13 "parser.y" /* yacc.c:1909  */
+#line 15 "parser.y" /* yacc.c:1909  */
 
 	char *str;
 	char *title;
 	int  *intval;
 
-#line 80 "parser.h" /* yacc.c:1909  */
+#line 81 "parser.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

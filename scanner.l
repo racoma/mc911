@@ -1,56 +1,62 @@
 %{
 #include "parser.h"
+
 %}
 
-DOCUMENTCLASS \\documentclass\[.*\]\{.*\}
-USERPACKAGE \\userpackage\[.*\]\{.*\}
-AUTHOR \\athor\{.*\}
+DOCUMENTCLASS \\documentclass\{.*\}
+DOCUMENTCLASS1 \\documentclass\[.*\]\{.*\}
+USEPACKAGE \\usepackage\{.*\}
+USEPACKAGE1 \\usepackage\[.*\]\{.*\}
+AUTHOR \\author\{.*\}
 
-PHRASE [A-z0-9_ \.\,-]+
-STRING [A-z0-9_ ]+
-WHITESPACE [ \r\t]+
+NEWLINE ^[\n]+
+WHITESPACE [ \t]+
+STRING [A-z0-9_\.\,-/]+
 ANY_CHAR .
 
 %%
+{WHITESPACE} {
+	yylval.str = (char *) strdup(yytext);
+	return T_WHITESPACE;
+} ;
 
-{WHITESPACE}         /* ignore */ ;
+{NEWLINE} {
+	yylval.str = (char *) strdup(yytext);
+	return T_NEWLINE;
+} ;
+
+"\\n" { return T_ENDLINE; }
+
 {DOCUMENTCLASS}      /* ignore */ ;
-{USERPACKAGE}        /* ignore */ ;
+{DOCUMENTCLASS1}     /* ignore */ ;
+{USEPACKAGE}        /* ignore */ ;
+{USEPACKAGE1}       /* ignore */ ;
 {AUTHOR}             /* ignore */ ;
 
-"\\title" {	
-	yylval.title = (char *) strdup(yytext);
-	return T_TITLE;
-}
-
-"\\begin" 			{return T_BEGIN; }
-"\\end"				{return T_END;}
+"\\title" 				{return T_TITLE;}
+"\\begin" 				{return T_BEGIN;}
+"\\end"					{return T_END;}
 "\\maketitle"			{return T_MAKETITLE;}
-"\\textbf"			{return T_TEXTBF;}
-"\\textit"			{return T_TEXTIT;}
+"\\textbf"				{return T_TEXTBF;}
+"\\textit"				{return T_TEXTIT;}
 "\\includegraphics"		{return T_IMG;}
-"\\cite"			{return T_CITE;}
-"\\bibitem"			{return T_BBITEM;}
-"\\item"			{return T_ITEM;}
-"document"			{return T_DOCUMENT;}
-"itemize"			{return T_ITEMIZE;}
+"\\cite"				{return T_CITE;}
+"\\bibitem"				{return T_BBITEM;}
+"\\item"				{return T_ITEM;}
+"document"				{return T_DOCUMENT;}
+"itemize"				{return T_ITEMIZE;}
 "thebibliography"		{return T_THEBIB;}
 
 "\\$"	{return T_CIFRAO;}
-"\\n"	{return T_NEWLINE;}
-
+"["		{return '[';}
+"]"		{return ']';}
 "("		{return '(';}
 ")"		{return ')';} 
 "{"		{return '{';}
 "}"		{return '}';}
-"," 		{return ',';}
+"," 	{return ',';}
 ";"		{return ';';}
 "*"		{return '*';}
-
-{PHRASE} {
-	yylval.str = (char *) strdup(yytext);
-	return T_PHRASE;
-}
 
 {STRING} {
 	yylval.str = (char *) strdup(yytext);
